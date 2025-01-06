@@ -1,0 +1,135 @@
+﻿### Get all tracks from the store
+GET localhost:5133/store/tracks
+
+### Get track by id
+GET localhost:5133/store/tracks/{{id}}
+
+### Get all albums from the store
+GET localhost:5133/store/albums
+
+### Get album by id
+GET localhost:5133/store/albums/{{id}}
+
+### Add new user
+POST http://localhost:5133/signup
+Content-Type: application/json
+
+{
+  "email": "someone@gmail.com",
+  "password": "pass123"
+}
+
+### Login user
+POST http://localhost:5133/login
+Content-Type: application/json
+
+{
+"email": "someone@gmail.com",
+"password": "pass123"
+}
+
+> {% client.global.set("auth_token", response.body); %}
+
+### Get tracks from user library
+GET http://localhost:5133/library/tracks
+Authorization: Bearer {{auth_token}}
+
+### Add track to user library
+POST http://localhost:5133/library/tracks
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+"677c10badc41299ee32f7063"
+
+### Remove track from user library
+DELETE http://localhost:5133/library/tracks
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+"677c10badc41299ee32f7063"
+
+### Add new track to the store
+POST http://localhost:5133/store/tracks
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "title": "Title",
+  "artist": "Artist",
+  "year": 2025,
+  "length": 222
+}
+
+### Modify existing track
+PATCH http://localhost:5133/store/tracks/{{id}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "title": "New Title",
+  "length": 333
+}
+
+### Delete existing track
+DELETE http://localhost:5133/store/tracks/{{id}}
+Authorization: Bearer {{auth_token}}
+
+### Get albums from user library
+GET http://localhost:5133/library/albums
+Authorization: Bearer {{auth_token}}
+
+### Add album to user library
+POST http://localhost:5133/library/albums
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+"677c4a785e793a5b3903b930"
+
+### Remove album from user library
+DELETE http://localhost:5133/library/albums
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+"677c4a785e793a5b3903b930"
+
+### Add new album to the store
+POST http://localhost:5133/store/albums
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "title": "Album Title",
+  "artist": "Artist",
+  "year": 2025,
+  "tracks": [
+    "677c0cdadc41299ee32f7051",
+    "677c0e35dc41299ee32f7055",
+    "677c0f78dc41299ee32f705d",
+    "677c0ec8dc41299ee32f7059",
+    "677c1029dc41299ee32f7061",
+    "677c0c09dc41299ee32f704e",
+    "677c1053dc41299ee32f7062",
+    "677c4ee3082569c008aef19b",
+    "677c4f12082569c008aef19c",
+    "677c4f26082569c008aef19d",
+    "677c4f40082569c008aef19e"
+  ]
+}
+
+### Modify existing album
+PATCH http://localhost:5133/store/albums/{{id}}
+Authorization: Bearer {{auth_token}}
+Content-Type: application/json
+
+{
+  "title": "New Title",
+  "tracks": [
+    "677c0a79dc41299ee32f7049",
+    "677c0adddc41299ee32f704a",
+    "677c0b02dc41299ee32f704b"
+  ]
+}
+
+### Delete existing album
+DELETE http://localhost:5133/store/albums/{{id}}
+Authorization: Bearer {{auth_token}}

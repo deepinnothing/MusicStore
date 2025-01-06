@@ -1,0 +1,33 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5133",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "PORT": "5133",
+        "DB_USER": "deepinnothing",
+        "DB_PASSWORD": "pass123",
+        "DB_NAME": "music_store",
+        "JWT_KEY": "super-duper-secret-jwt-key-1234567890"
+      }
+    },
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "https://localhost:7073;http://localhost:5133",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "PORT": "7073",
+        "DB_USER": "deepinnothing",
+        "DB_PASSWORD": "pass123",
+        "DB_NAME": "music_store",
+        "JWT_KEY": "super-duper-secret-jwt-key-1234567890"
+      }
+    }
+  }
+}
