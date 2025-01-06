@@ -10,6 +10,9 @@ public static class UserController
     {
         try
         {
+            // Do not let new users become admins
+            if (user.IsAdmin) return Results.Forbid();
+            
             IMongoCollection<User>? usersCollection = database.GetCollection<User>("users");
             // Replace the password with a hash generated for it
             user.Password = new PasswordHasher<object?>().HashPassword(null, user.Password);
