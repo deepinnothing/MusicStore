@@ -90,14 +90,14 @@ Expected Response
 GET /store/tracks
 ```
 Expected Response
-```
+```js
 [
     {
-    "id": "6779a1736141e8aa89d05aa4",
-    "title": "Ricochet",
-    "artist": "Starset",
-    "year": 2017,
-    "length": 310
+    	"id": "6779a1736141e8aa89d05aa4",
+    	"title": "Ricochet",
+    	"artist": "Starset",
+    	"year": 2017,
+    	"length": 310
     },
     ...
 ]
