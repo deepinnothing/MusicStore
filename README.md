@@ -1,13 +1,17 @@
-MusicStore is a small backend REST API made with ASP.NET (C#), MongoDB and JWT auth. The Requests.http file includes all available requests.
+MusicStore is a backend REST API developed using ASP.NET (C#), MongoDB, and JWT-based authentication. The API provides functionalities to manage users, music tracks, and albums, supporting operations like data retrieval, user authentication, and resource management.
 
-The project relies on environment variables which can be changed in Properties/launchSettings.json
+A Requests.http file is included to facilitate testing of available endpoints. This file can be utilized in IDEs like JetBrains Rider to execute and verify requests during development.
 
-API has the following structure:
-- Models: includes object representations that are stored in the Mongo database.
-- Endpoint: maps endpoints that accept REST request from a client (can be tested by executing requests in Requests.http if used with Rider).
-- Controllers: classes and methods that handle requests from a client (used by endpoints).
+The application uses environment variables for configuration. They can be changed in Properties/launchSettings.json
 
-MongoDB contains the following collections:
-- users: information about user accounts and libraries attached to them: email (used as login), password (stored as hash), field indicating if user is an admin, libraries for music tracks and albums respectively (stores only ids of the tracks in the store).
-- tracks: information about music track: title, artist, year, length.
-- albums: information about albums: title, artist, year, number of tracks, array of tracks (track ids).
+The API is organized into the following key components:
+- Models
+  -  Contains object representations of entities stored in the MongoDB database.
+  -  These classes define the schema and relationships of data within the system.
+- Endpoints
+  -  Maps the API routes to specific HTTP methods (GET, POST, PUT, DELETE, etc.).
+  -  Acts as the interface layer between the client and the API logic.
+  -  Endpoints can be tested using the Requests.http file for immediate feedback.
+-  Controllers
+  -  Includes classes and methods that handle the logic for incoming requests.
+  -  Controllers process input, interact with the data layer (via Models), and return appropriate responses.
