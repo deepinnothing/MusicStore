@@ -1,4 +1,7 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.IO;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
 using MusicStore.API.Models;
 
 namespace MusicStore.API.Controllers;
@@ -30,9 +33,9 @@ public static class StoreController
             IMongoCollection<Track>? tracksCollection = database.GetCollection<Track>("tracks");
             // An empty filter to find all documents in the collection
             FilterDefinition<Track>? filter = Builders<Track>.Filter.Empty;
-            
+
             List<Track>? tracks = await tracksCollection.Find(filter).ToListAsync();
-                
+
             return Results.Ok(tracks);
         }
         catch (Exception ex)
@@ -68,16 +71,18 @@ public static class StoreController
                 updates.Add(Builders<Track>.Update.Set("length", trackUpdate.Length.Value));
             }
 
-            if (updates.Count == 0) 
+            if (updates.Count == 0)
                 return Results.BadRequest("No fields provided to update.");
-                
+
             IMongoCollection<Track>? tracksCollection = database.GetCollection<Track>("tracks");
             // Update the track with the specified id if one exists
             FilterDefinition<Track>? filter = Builders<Track>.Filter.Eq(t => t.Id, id);
             UpdateDefinition<Track>? updateDefinition = Builders<Track>.Update.Combine(updates);
             UpdateResult? result = await tracksCollection.UpdateOneAsync(filter, updateDefinition);
-                
-            return result.MatchedCount == 0 ? Results.NotFound($"Track with id {id} not found.") : Results.Ok($"Track with id {id} successfully updated.");
+
+            return result.MatchedCount == 0
+                ? Results.NotFound($"Track with id {id} not found.")
+                : Results.Ok($"Track with id {id} successfully updated.");
         }
         catch (Exception ex)
         {
@@ -91,26 +96,28 @@ public static class StoreController
         {
             IMongoCollection<Track>? tracksCollection = database.GetCollection<Track>("tracks");
             FilterDefinition<Track>? filter = Builders<Track>.Filter.Eq(t => t.Id, id);
-                
+
             DeleteResult? result = await tracksCollection.DeleteOneAsync(filter);
-                
-            return result.DeletedCount == 0 ? Results.NotFound($"Track with id {id} not found.") : Results.Ok($"Track with id {id} successfully deleted.");
+
+            return result.DeletedCount == 0
+                ? Results.NotFound($"Track with id {id} not found.")
+                : Results.Ok($"Track with id {id} successfully deleted.");
         }
         catch (Exception ex)
         {
             return Results.InternalServerError(ex.Message);
         }
     }
-    
+
     public static async Task<IResult> GetTrackById(string id, IMongoDatabase database)
     {
         try
         {
             IMongoCollection<Track>? tracksCollection = database.GetCollection<Track>("tracks");
             FilterDefinition<Track>? filter = Builders<Track>.Filter.Eq(t => t.Id, id);
-                
+
             Track? track = await tracksCollection.Find(filter).FirstOrDefaultAsync();
-                
+
             return track is null ? Results.NotFound($"Track with id {id} not found.") : Results.Ok(track);
         }
         catch (Exception ex)
@@ -118,13 +125,14 @@ public static class StoreController
             return Results.InternalServerError(ex.Message);
         }
     }
-    
+
     public static async Task<IResult> AddNewAlbum(Album album, IMongoDatabase database)
     {
         try
         {
-            IMongoCollection<Album>? tracksCollection = database.GetCollection<Album>("albums");
-            await tracksCollection.InsertOneAsync(album);
+            IMongoCollection<Album>? albumsCollection = database.GetCollection<Album>("albums");
+            await albumsCollection.InsertOneAsync(album);
+
             return Results.Created($"store/tracks/{album.Id}", new
             {
                 message = "Added new album.",
@@ -143,10 +151,14 @@ public static class StoreController
         {
             IMongoCollection<Album>? albumsCollection = database.GetCollection<Album>("albums");
             FilterDefinition<Album>? filter = Builders<Album>.Filter.Empty;
-                
-            List<Album>? albums = await albumsCollection.Find(filter).ToListAsync();
-                
-            return Results.Ok(albums);
+            ProjectionDefinition<Album>? projection = Builders<Album>.Projection.Exclude("tracks");
+            List<BsonDocument>? albums = await albumsCollection.Find(filter).Project(projection).ToListAsync();
+
+            return Results.Ok(albums.Select(bson =>
+            {
+                bson["_id"] = bson["_id"].ToString();
+                return bson.ToDictionary();
+            }).ToList());
         }
         catch (Exception ex)
         {
@@ -180,15 +192,17 @@ public static class StoreController
                 updates.Add(Builders<Album>.Update.Set("tracks", albumUpdate.Tracks));
             }
 
-            if (updates.Count == 0) 
+            if (updates.Count == 0)
                 return Results.BadRequest("No fields provided to update.");
-                
+
             IMongoCollection<Album>? albumsCollection = database.GetCollection<Album>("albums");
             FilterDefinition<Album>? filter = Builders<Album>.Filter.Eq(t => t.Id, id);
             UpdateDefinition<Album>? updateDefinition = Builders<Album>.Update.Combine(updates);
             UpdateResult? result = await albumsCollection.UpdateOneAsync(filter, updateDefinition);
-                
-            return result.MatchedCount == 0 ? Results.NotFound($"Album with id {id} not found.") : Results.Ok($"Album with id {id} successfully updated.");
+
+            return result.MatchedCount == 0
+                ? Results.NotFound($"Album with id {id} not found.")
+                : Results.Ok($"Album with id {id} successfully updated.");
         }
         catch (Exception ex)
         {
@@ -202,27 +216,37 @@ public static class StoreController
         {
             IMongoCollection<Album>? albumsCollection = database.GetCollection<Album>("albums");
             FilterDefinition<Album>? filter = Builders<Album>.Filter.Eq(t => t.Id, id);
-                
+
             DeleteResult? result = await albumsCollection.DeleteOneAsync(filter);
-                
-            return result.DeletedCount == 0 ? Results.NotFound($"Album with id {id} not found.") : Results.Ok($"Album with id {id} successfully deleted.");
+
+            return result.DeletedCount == 0
+                ? Results.NotFound($"Album with id {id} not found.")
+                : Results.Ok($"Album with id {id} successfully deleted.");
         }
         catch (Exception ex)
         {
             return Results.InternalServerError(ex.Message);
         }
     }
-    
+
     public static async Task<IResult> GetAlbumById(string id, IMongoDatabase database)
     {
         try
         {
             IMongoCollection<Album>? albumsCollection = database.GetCollection<Album>("albums");
             FilterDefinition<Album>? filter = Builders<Album>.Filter.Eq(t => t.Id, id);
-                
-            Album? album = await albumsCollection.Find(filter).FirstOrDefaultAsync();
-                
-            return album is null ? Results.NotFound($"Album with id {id} not found.") : Results.Ok(album);
+
+            BsonDocument? album = await albumsCollection.Aggregate().Match(filter)
+                .Lookup("tracks", "tracks", "_id", "tracks").FirstOrDefaultAsync();
+
+            if (album is null) return Results.NotFound($"Album with id {id} not found.");
+            
+            album["_id"] = album["_id"].ToString();
+            if (album["tracks"] is BsonArray tracks)
+                foreach (BsonValue? track in tracks)
+                    if (track is BsonDocument trackDoc)
+                        trackDoc["_id"] = trackDoc["_id"].ToString();
+            return Results.Ok(album.ToDictionary());
         }
         catch (Exception ex)
         {
