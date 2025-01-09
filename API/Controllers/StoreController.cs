@@ -149,9 +149,12 @@ public static class StoreController
         {
             IMongoCollection<Album>? albumsCollection = database.GetCollection<Album>("albums");
             FilterDefinition<Album>? filter = Builders<Album>.Filter.Empty;
+            
+            // When requesting all the albums from the store, tracks are usually not needed and create too much boilerplate
             ProjectionDefinition<Album>? projection = Builders<Album>.Projection.Exclude("tracks");
             List<BsonDocument>? albums = await albumsCollection.Find(filter).Project(projection).ToListAsync();
 
+            // Need to manually convert ObjectId to string
             return Results.Ok(albums.Select(bson =>
             {
                 bson["_id"] = bson["_id"].ToString();
@@ -233,12 +236,14 @@ public static class StoreController
         {
             IMongoCollection<Album>? albumsCollection = database.GetCollection<Album>("albums");
             FilterDefinition<Album>? filter = Builders<Album>.Filter.Eq(t => t.Id, id);
-
+            
+            // When single album is requested, it's better to return tracks details as well, not just ids
             BsonDocument? album = await albumsCollection.Aggregate().Match(filter)
                 .Lookup("tracks", "tracks", "_id", "tracks").FirstOrDefaultAsync();
 
             if (album is null) return Results.NotFound($"Album with id {id} not found.");
             
+            // Need to manually convert ObjectId to string
             album["_id"] = album["_id"].ToString();
             if (album["tracks"] is BsonArray tracks)
                 foreach (BsonValue? track in tracks)
