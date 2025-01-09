@@ -20,35 +20,35 @@ The API is organized into the following key components:
 On local host use: `http://localhost:5133/` or `https://localhost:7073` (port can be changed in `Properties/launchSettings.json`)
 
 Register & Login 
-| Method | Route                  | Description                                      |
-|--------|------------------------|--------------------------------------------------|
-| POST   | /signup                | registers new users                              |
-| POST   | /login                 | logins into user account                         |
+| Method | Route                  | Description                                      | Access Level    |
+|--------|------------------------|--------------------------------------------------|-----------------|
+| POST   | /signup                | registers new users                              | Everyone        |
+| POST   | /login                 | logins into user account                         | Everyone        |
 
 Store
-| Method | Route                  | Description                                      |
-|--------|------------------------|--------------------------------------------------|
-| GET    | /store/tracks          | returns array of tracks in the store             |
-| GET    | /store/tracks/{id}     | returns a track in the store by id               |
-| PATCH  | /store/tracks/{id}     | updates track specified by id                    |
-| POST   | /store/tracks/         | creates & returns new track                      |
-| DELETE | /store/tracks/{id}     | deletes track specified by id                    |
-| GET    | /store/albums          | returns array of albums in the store             |
-| GET    | /store/albums/{id}     | returns an album in the store by id              |
-| PATCH  | /store/albums/{id}     | updates album specified by id                    |
-| POST   | /store/albums/         | creates & returns new album                      |
-| DELETE | /store/albums/{id}     | deletes album specified by id                    |
+| Method | Route                  | Description                                      | Access Level    |
+|--------|------------------------|--------------------------------------------------|-----------------|
+| GET    | /store/tracks          | returns array of tracks in the store             | Everyone        |
+| GET    | /store/tracks/{id}     | returns a track in the store by id               | Everyone        |
+| PATCH  | /store/tracks/{id}     | updates track specified by id                    | Admin           |
+| POST   | /store/tracks/         | creates & returns new track                      | Admin           |
+| DELETE | /store/tracks/{id}     | deletes track specified by id                    | Admin           |
+| GET    | /store/albums          | returns array of albums in the store             | Everyone        |
+| GET    | /store/albums/{id}     | returns an album in the store by id              | Everyone        |
+| PATCH  | /store/albums/{id}     | updates album specified by id                    | Admin           |
+| POST   | /store/albums/         | creates & returns new album                      | Admin           |
+| DELETE | /store/albums/{id}     | deletes album specified by id                    | Admin           |
 
 
 Library
-| Method | Route                  | Description                                      |
-|--------|------------------------|--------------------------------------------------|
-| GET    | /library/tracks        | returns array of tracks in the user's library    |
-| POST   | /library/tracks        | adds new track to the user's library             |
-| DELETE | /library/tracks        | removes a track from the user's library          |
-| GET    | /library/albums        | returns array of albums in the user's library    |
-| POST   | /library/albums        | adds new album to the user's library             |
-| DELETE | /library/albums        | removes an album from the user's library         |
+| Method | Route                  | Description                                      | Access Level       |
+|--------|------------------------|--------------------------------------------------|--------------------|
+| GET    | /library/tracks        | returns array of tracks in the user's library    | Authenticated User |
+| POST   | /library/tracks        | adds new track to the user's library             | Authenticated User |
+| DELETE | /library/tracks        | removes a track from the user's library          | Authenticated User |
+| GET    | /library/albums        | returns array of albums in the user's library    | Authenticated User |
+| POST   | /library/albums        | adds new album to the user's library             | Authenticated User |
+| DELETE | /library/albums        | removes an album from the user's library         | Authenticated User |
 
 ## Register & Login Endpoints
 ### Register Endpoint
