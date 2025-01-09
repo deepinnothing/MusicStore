@@ -12,6 +12,6 @@ The API is organized into the following key components:
   -  Maps the API routes to specific HTTP methods (GET, POST, PUT, DELETE, etc.).
   -  Acts as the interface layer between the client and the API logic.
   -  Endpoints can be tested using the Requests.http file for immediate feedback.
--  Controllers
+- Controllers
   -  Includes classes and methods that handle the logic for incoming requests.
   -  Controllers process input, interact with the data layer (via Models), and return appropriate responses.
