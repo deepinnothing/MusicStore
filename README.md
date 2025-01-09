@@ -93,11 +93,11 @@ Expected Response
 ```js
 [
     {
-    	"id": "6779d77866272f6123d04e35",
-    	"title": "Hell Is Where The Heart Is",
-    	"artist": "Get Scared",
-    	"year": 2019,
-    	"length": 213
+      "id": "6779a1736141e8aa89d05aa4",
+      "title": "Ricochet",
+      "artist": "Starset",
+      "year": 2017,
+      "length": 310
     },
     ...
 ]
@@ -109,13 +109,13 @@ GET /store/tracks/{id}
 ```
 Expected Response
 ```js
-  {
-    "id": "6779a1736141e8aa89d05aa4",
-    "title": "Ricochet",
-    "artist": "Starset",
-    "year": 2017,
-    "length": 310
-  }
+{
+  "id": "6779d77866272f6123d04e35",
+  "title": "Hell Is Where The Heart Is",
+  "artist": "Get Scared",
+  "year": 2019,
+  "length": 213
+}
 ```
 
 ### PATCH Track By ID
