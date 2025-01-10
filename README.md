@@ -349,98 +349,28 @@ Expected Response
 ]
 ```
 
-### GET album by ID
+### POST album to user's library
 ```js
-GET /store/albums/{id}
-```
-Expected Response
-```js
-{
-  "_id": "677c4e1e5e793a5b3903b935",
-  "title": "Graveyard Shift",
-  "artist": "Motionless In White",
-  "year": 2017,
-  "tracks": [
-    {
-      "_id": "677c0b91dc41299ee32f704d",
-      "title": "Rats",
-      "artist": "Motionless In White",
-      "year": 2017,
-      "length": 236
-    },
-    .........
-    {
-      "_id": "677c4d355e793a5b3903b934",
-      "title": "Eternally Yours",
-      "artist": "Motionless In White",
-      "year": 2017,
-      "length": 313
-    }
-  ],
-  "tracks_number": 12
-}
-```
-
-### PATCH album By ID
-```js
-PATCH /store/albums/{id}
+POST /library/albums
 ```
 Expected Body
 ```js
-{
-   "title": "Album Title", // string, optional
-   "artist": "Artist who created the album", // string, optional
-   "year": 2025, // int, optional
-   "tracks": [
-      "677c4d355e793a5b3903b934",
-      .....
-    ]  // array of track ids, optional
-}
+"677c4e1e5e793a5b3903b935"
 ```
 Expected Response
 ```js
-"Album with id {id} successfully updated."
+"Album with id 677c4e1e5e793a5b3903b935 successfully added to the library."
 ```
 
-### POST album
+### DELETE album from user's library
 ```js
-POST /store/albums
+DELETE /library/albums
 ```
 Expected Body
 ```js
-{
-   "title": "Album Title", // string, required
-   "artist": "Artist who created the album", // string, required
-   "year": 2025, // int, required
-   "tracks": [
-      "677c4d355e793a5b3903b934",
-      .....
-    ]  // array of track ids, required
-}
-```
-Expected Response
-```js
-{
-    "message": "Added new album.",
-    "data": {
-      "id": "6779d77866272f6123d04e35",
-      "title": "Album Title",
-      "artist": "Artist who created the album",
-      "year": 2025,
-      "tracks": [
-        "677c4d355e793a5b3903b934",
-        .....
-      ],
-      "tracks_number": 12
-    }
-}
-```
-
-### DELETE album by ID
-```js
-DELETE /store/albums/{id}
+"677c4e1e5e793a5b3903b935"
 ```
 Expected Response: 
 ```js
-"Album with id {id} successfully deleted."
+"Album with id 677c4e1e5e793a5b3903b935 successfully removed from the library."
 ```
