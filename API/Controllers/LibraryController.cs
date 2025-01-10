@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MusicStore.API.Models;
 
@@ -96,10 +97,17 @@ public static class LibraryController
             if (foundUser == null) return Results.Unauthorized();
             
             // Find albums from user's library in albums collection to return more useful info instead of just album ids
+            // When requesting multiple albums tracks are usually not needed and create too much boilerplate
             IMongoCollection<Album>? albumsCollection = database.GetCollection<Album>("albums");
-            List<Album>? albums = await albumsCollection.Find(t => foundUser.LibraryAlbums.Contains(t.Id!)).ToListAsync();
+            List<BsonDocument>? albums = await albumsCollection.Find(t => foundUser.LibraryAlbums.Contains(t.Id!))
+                .Project(Builders<Album>.Projection.Exclude("tracks")).ToListAsync();
                 
-            return Results.Ok(albums);
+            // Need to manually convert ObjectId to string
+            return Results.Ok(albums.Select(bson =>
+            {
+                bson["_id"] = bson["_id"].ToString();
+                return bson.ToDictionary();
+            }).ToList());
         }
         catch (Exception ex)
         {
