@@ -19,13 +19,13 @@ The API is organized into the following key components:
 ## API Endpoints
 On local host use: `http://localhost:5133/` or `https://localhost:7073` (port can be changed in `Properties/launchSettings.json`)
 
-Register & Login 
+[Register & Login](#register--login-endpoints) 
 | Method | Route                  | Description                                      | Access Level    |
 |--------|------------------------|--------------------------------------------------|-----------------|
 | POST   | /signup                | registers new users                              | Everyone        |
 | POST   | /login                 | logins into user account                         | Everyone        |
 
-Store
+[Store](#store-endpoints)
 | Method | Route                  | Description                                      | Access Level    |
 |--------|------------------------|--------------------------------------------------|-----------------|
 | GET    | /store/tracks          | returns array of tracks in the store             | Everyone        |
@@ -40,7 +40,7 @@ Store
 | DELETE | /store/albums/{id}     | deletes album specified by id                    | Admin           |
 
 
-Library
+[Library](#library-endpoints)
 | Method | Route                  | Description                                      | Access Level       |
 |--------|------------------------|--------------------------------------------------|--------------------|
 | GET    | /library/tracks        | returns array of tracks in the user's library    | Authenticated User |
