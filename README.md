@@ -285,3 +285,162 @@ Expected Response:
 ```js
 "Album with id {id} successfully deleted."
 ```
+
+## Library Endpoints
+### GET tracks from user's library
+```js
+GET /library/tracks
+```
+Expected Response
+```js
+[
+    {
+      "id": "6779a1736141e8aa89d05aa4",
+      "title": "Ricochet",
+      "artist": "Starset",
+      "year": 2017,
+      "length": 310
+    },
+    ...
+]
+```
+
+### POST track to user's library
+```js
+POST /library/tracks
+```
+Expected Body
+```js
+"6779a1736141e8aa89d05aa4"
+```
+Expected Response
+```js
+"Track with id 6779a1736141e8aa89d05aa4 successfully added to the library."
+```
+
+### DELETE track by ID
+```js
+DELETE /library/tracks
+```
+Expected Body
+```js
+"6779a1736141e8aa89d05aa4"
+```
+Expected Response: 
+```js
+"Track with id 6779a1736141e8aa89d05aa4 successfully removed from the library."
+```
+
+### GET albums from user's library
+```js
+GET /store/albums
+```
+Expected Response
+```js
+[
+    {
+      "_id": "677c4e1e5e793a5b3903b935",
+      "title": "Graveyard Shift",
+      "artist": "Motionless In White",
+      "year": 2017,
+      "tracks_number": 12
+    },
+    ...
+]
+```
+
+### GET album by ID
+```js
+GET /store/albums/{id}
+```
+Expected Response
+```js
+{
+  "_id": "677c4e1e5e793a5b3903b935",
+  "title": "Graveyard Shift",
+  "artist": "Motionless In White",
+  "year": 2017,
+  "tracks": [
+    {
+      "_id": "677c0b91dc41299ee32f704d",
+      "title": "Rats",
+      "artist": "Motionless In White",
+      "year": 2017,
+      "length": 236
+    },
+    .........
+    {
+      "_id": "677c4d355e793a5b3903b934",
+      "title": "Eternally Yours",
+      "artist": "Motionless In White",
+      "year": 2017,
+      "length": 313
+    }
+  ],
+  "tracks_number": 12
+}
+```
+
+### PATCH album By ID
+```js
+PATCH /store/albums/{id}
+```
+Expected Body
+```js
+{
+   "title": "Album Title", // string, optional
+   "artist": "Artist who created the album", // string, optional
+   "year": 2025, // int, optional
+   "tracks": [
+      "677c4d355e793a5b3903b934",
+      .....
+    ]  // array of track ids, optional
+}
+```
+Expected Response
+```js
+"Album with id {id} successfully updated."
+```
+
+### POST album
+```js
+POST /store/albums
+```
+Expected Body
+```js
+{
+   "title": "Album Title", // string, required
+   "artist": "Artist who created the album", // string, required
+   "year": 2025, // int, required
+   "tracks": [
+      "677c4d355e793a5b3903b934",
+      .....
+    ]  // array of track ids, required
+}
+```
+Expected Response
+```js
+{
+    "message": "Added new album.",
+    "data": {
+      "id": "6779d77866272f6123d04e35",
+      "title": "Album Title",
+      "artist": "Artist who created the album",
+      "year": 2025,
+      "tracks": [
+        "677c4d355e793a5b3903b934",
+        .....
+      ],
+      "tracks_number": 12
+    }
+}
+```
+
+### DELETE album by ID
+```js
+DELETE /store/albums/{id}
+```
+Expected Response: 
+```js
+"Album with id {id} successfully deleted."
+```
